@@ -1,0 +1,423 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.busgo.wallet.inner.dao.UserWalletDao">
+    <!--Create by Auto Generator -->
+    <resultMap type="com.busgo.wallet.inner.model.UserWallet" id="UserWalletMap">
+        <result column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="symbol" property="symbol"/>
+        <result column="balance" property="balance"/>
+        <result column="password" property="password"/>
+        <result column="address" property="address"/>
+        <result column="create_time" property="createTime"/>
+    </resultMap>
+
+
+    <sql id="_field_list">
+         `id`,
+         `user_id`,
+         `symbol`,
+         `balance`,
+         `password`,
+         `address`,
+         `create_time`
+    </sql>
+
+    <sql id="_value_list">
+     #{id},
+     #{userId},
+     #{symbol},
+     #{balance},
+     #{password},
+     #{address},
+     #{createTime}
+    </sql>
+
+    <sql id="_batch_value_list">
+     #{item.id},
+     #{item.userId},
+     #{item.symbol},
+     #{item.balance},
+     #{item.password},
+     #{item.address},
+     #{item.createTime}
+    </sql>
+
+    <sql id="_common_where">
+     <if test="id !=null">AND `id`=#{id}</if>
+     <if test="userId !=null">AND `user_id`=#{userId}</if>
+     <if test="symbol !=null">AND `symbol`=#{symbol}</if>
+     <if test="balance !=null">AND `balance`=#{balance}</if>
+     <if test="password !=null">AND `password`=#{password}</if>
+     <if test="address !=null">AND `address`=#{address}</if>
+     <if test="createTime !=null">AND `create_time`=#{createTime}</if>
+        <if test="includeIdList !=null and includeIdList.size()>0">
+            AND `id` IN
+            <foreach collection="includeIdList" item="item" open="(" close=")"
+                     separator=",">
+                    #{item}
+            </foreach>
+        </if>
+        <if test="excludeIdList !=null and excludeIdList.size()>0">
+            AND `id` NOT IN
+            <foreach collection="excludeIdList" item="item" open="(" close=")"
+                     separator=",">
+                    #{item}
+            </foreach>
+        </if>
+          <if test="includeIdList !=null and includeIdList.size()>0">
+              AND `id` IN
+              <foreach collection="includeIdList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeIdList !=null and excludeIdList.size() >0">
+            AND `id` NOT IN
+            <foreach collection="excludeIdList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeUserIdList !=null and includeUserIdList.size()>0">
+              AND `user_id` IN
+              <foreach collection="includeUserIdList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeUserIdList !=null and excludeUserIdList.size() >0">
+            AND `user_id` NOT IN
+            <foreach collection="excludeUserIdList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeSymbolList !=null and includeSymbolList.size()>0">
+              AND `symbol` IN
+              <foreach collection="includeSymbolList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeSymbolList !=null and excludeSymbolList.size() >0">
+            AND `symbol` NOT IN
+            <foreach collection="excludeSymbolList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeBalanceList !=null and includeBalanceList.size()>0">
+              AND `balance` IN
+              <foreach collection="includeBalanceList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeBalanceList !=null and excludeBalanceList.size() >0">
+            AND `balance` NOT IN
+            <foreach collection="excludeBalanceList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includePasswordList !=null and includePasswordList.size()>0">
+              AND `password` IN
+              <foreach collection="includePasswordList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludePasswordList !=null and excludePasswordList.size() >0">
+            AND `password` NOT IN
+            <foreach collection="excludePasswordList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeAddressList !=null and includeAddressList.size()>0">
+              AND `address` IN
+              <foreach collection="includeAddressList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeAddressList !=null and excludeAddressList.size() >0">
+            AND `address` NOT IN
+            <foreach collection="excludeAddressList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeCreateTimeList !=null and includeCreateTimeList.size()>0">
+              AND `create_time` IN
+              <foreach collection="includeCreateTimeList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeCreateTimeList !=null and excludeCreateTimeList.size() >0">
+            AND `create_time` NOT IN
+            <foreach collection="excludeCreateTimeList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="_common_sort">
+        <if test="sorts !=null">
+            ORDER BY
+            <foreach collection="sorts" item="sort" separator=",">
+            ${sort.columnName} ${sort.sortMode.mode}
+            </foreach>
+        </if>
+    </sql>
+
+    <sql id="_page_field">
+        <if test="offset != null and rows !=null">
+           LIMIT #{offset},#{rows}
+        </if>
+    </sql>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user_wallet`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="_field_list"/>
+        </trim>
+        VALUES
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="_value_list"/>
+        </trim>
+    </insert>
+
+    <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO `user_wallet`
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <include refid="_field_list"/>
+        </trim>
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            <include refid="_batch_value_list"/>
+            )
+        </foreach>
+    </insert>
+
+    <select id="selectById" parameterType="java.lang.Long" resultMap="UserWalletMap">
+        SELECT
+        <include refid="_field_list"/>
+        FROM `user_wallet`
+        WHERE `id` = #{id} limit 1
+    </select>
+
+    <select id="selectByIdForUpdate" parameterType="java.lang.Long"
+            resultMap="UserWalletMap">
+        SELECT
+        <include refid="_field_list"/>
+        FROM `user_wallet`
+        WHERE `id` = #{id} limit 1 FOR UPDATE
+    </select>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        DELETE FROM `user_wallet` WHERE `id` = #
+        {id} limit 1
+    </delete>
+
+    <delete id="deleteByParam" parameterType="map">
+        DELETE
+        FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </delete>
+
+    <update id="updateById">
+        UPDATE `user_wallet`
+        <trim prefix="SET" suffixOverrides="," prefixOverrides=",">
+            <if test="userId !=null">`user_id`=#{userId},</if>
+            <if test="symbol !=null">`symbol`=#{symbol},</if>
+            <if test="balance !=null">`balance`=#{balance},</if>
+            <if test="password !=null">`password`=#{password},</if>
+            <if test="address !=null">`address`=#{address},</if>
+            <if test="createTime !=null">`create_time`=#{createTime},</if>
+        </trim>
+        WHERE `id`=#{id} LIMIT 1
+    </update>
+
+    <update id="updateByQuery">
+        UPDATE `user_wallet`
+        <trim prefix="SET" suffixOverrides="," prefixOverrides=",">
+            <if test="po.userId !=null">`user_id`=#{po.userId},</if>
+            <if test="po.symbol !=null">`symbol`=#{po.symbol},</if>
+            <if test="po.balance !=null">`balance`=#{po.balance},</if>
+            <if test="po.password !=null">`password`=#{po.password},</if>
+            <if test="po.address !=null">`address`=#{po.address},</if>
+            <if test="po.createTime !=null">`create_time`=#{po.createTime},</if>
+        </trim>
+        <where>
+            <if test="query.id !=null">AND `id`=#
+                {query.id}
+            </if>
+            <if test="query.userId !=null">AND `user_id`=#
+                {query.userId}
+            </if>
+            <if test="query.symbol !=null">AND `symbol`=#
+                {query.symbol}
+            </if>
+            <if test="query.balance !=null">AND `balance`=#
+                {query.balance}
+            </if>
+            <if test="query.password !=null">AND `password`=#
+                {query.password}
+            </if>
+            <if test="query.address !=null">AND `address`=#
+                {query.address}
+            </if>
+            <if test="query.createTime !=null">AND `create_time`=#
+                {query.createTime}
+            </if>
+        </where>
+    </update>
+
+    <select id="queryListByParam" parameterType="map" resultMap="UserWalletMap">
+        SELECT
+        <include refid="_field_list"/>
+        FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <!--pk field list search-->
+    <select id="queryPkListByParam" parameterType="map" resultType="java.lang.Long">
+        SELECT
+        `id`
+        FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <!--single field list search-->
+    <select id="queryIdListByParam" parameterType="map" resultType="java.lang.Long">
+        SELECT DISTINCT(`id`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryUserIdListByParam" parameterType="map" resultType="java.lang.Long">
+        SELECT DISTINCT(`user_id`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="querySymbolListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`symbol`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryBalanceListByParam" parameterType="map" resultType="java.math.BigDecimal">
+        SELECT DISTINCT(`balance`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryPasswordListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`password`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryAddressListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`address`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryCreateTimeListByParam" parameterType="map" resultType="java.util.Date">
+        SELECT DISTINCT(`create_time`) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+
+    <!--single field Count search-->
+    <select id="queryIdCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`id`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryUserIdCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`user_id`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="querySymbolCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`symbol`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryBalanceCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`balance`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryPasswordCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`password`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryAddressCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`address`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryCreateTimeCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`create_time`)) FROM `user_wallet`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+</mapper>
