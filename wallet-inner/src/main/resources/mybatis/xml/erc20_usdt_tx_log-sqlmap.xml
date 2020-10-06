@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.busgo.wallet.inner.dao.UsdtTxRecordDao">
+<mapper namespace="com.busgo.wallet.inner.dao.Erc20UsdtTxLogDao">
     <!--Create by Auto Generator -->
-    <resultMap type="com.busgo.wallet.inner.model.UsdtTxRecord" id="UsdtTxRecordMap">
+    <resultMap type="com.busgo.wallet.inner.model.Erc20UsdtTxLog" id="Erc20UsdtTxLogMap">
         <result column="id" property="id"/>
-        <result column="user_id" property="userId"/>
-        <result column="serial_no" property="serialNo"/>
-        <result column="type" property="type"/>
+        <result column="block_number" property="blockNumber"/>
+        <result column="tx_hash" property="txHash"/>
         <result column="quantity" property="quantity"/>
-        <result column="from_address" property="fromAddress"/>
-        <result column="to_address" property="toAddress"/>
+        <result column="type" property="type"/>
+        <result column="from" property="from"/>
+        <result column="to" property="to"/>
         <result column="contract_address" property="contractAddress"/>
         <result column="status" property="status"/>
-        <result column="occur_date" property="occurDate"/>
-        <result column="tx_hash" property="txHash"/>
-        <result column="times" property="times"/>
-        <result column="remark" property="remark"/>
         <result column="timestamp" property="timestamp"/>
         <result column="create_time" property="createTime"/>
         <result column="modify_time" property="modifyTime"/>
@@ -24,18 +20,14 @@
 
     <sql id="_field_list">
          `id`,
-         `user_id`,
-         `serial_no`,
-         `type`,
+         `block_number`,
+         `tx_hash`,
          `quantity`,
-         `from_address`,
-         `to_address`,
+         `type`,
+         `from`,
+         `to`,
          `contract_address`,
          `status`,
-         `occur_date`,
-         `tx_hash`,
-         `times`,
-         `remark`,
          `timestamp`,
          `create_time`,
          `modify_time`
@@ -43,18 +35,14 @@
 
     <sql id="_value_list">
      #{id},
-     #{userId},
-     #{serialNo},
-     #{type},
+     #{blockNumber},
+     #{txHash},
      #{quantity},
-     #{fromAddress},
-     #{toAddress},
+     #{type},
+     #{from},
+     #{to},
      #{contractAddress},
      #{status},
-     #{occurDate},
-     #{txHash},
-     #{times},
-     #{remark},
      #{timestamp},
      #{createTime},
      #{modifyTime}
@@ -62,18 +50,14 @@
 
     <sql id="_batch_value_list">
      #{item.id},
-     #{item.userId},
-     #{item.serialNo},
-     #{item.type},
+     #{item.blockNumber},
+     #{item.txHash},
      #{item.quantity},
-     #{item.fromAddress},
-     #{item.toAddress},
+     #{item.type},
+     #{item.from},
+     #{item.to},
      #{item.contractAddress},
      #{item.status},
-     #{item.occurDate},
-     #{item.txHash},
-     #{item.times},
-     #{item.remark},
      #{item.timestamp},
      #{item.createTime},
      #{item.modifyTime}
@@ -81,18 +65,14 @@
 
     <sql id="_common_where">
      <if test="id !=null">AND `id`=#{id}</if>
-     <if test="userId !=null">AND `user_id`=#{userId}</if>
-     <if test="serialNo !=null">AND `serial_no`=#{serialNo}</if>
-     <if test="type !=null">AND `type`=#{type}</if>
+     <if test="blockNumber !=null">AND `block_number`=#{blockNumber}</if>
+     <if test="txHash !=null">AND `tx_hash`=#{txHash}</if>
      <if test="quantity !=null">AND `quantity`=#{quantity}</if>
-     <if test="fromAddress !=null">AND `from_address`=#{fromAddress}</if>
-     <if test="toAddress !=null">AND `to_address`=#{toAddress}</if>
+     <if test="type !=null">AND `type`=#{type}</if>
+     <if test="from !=null">AND `from`=#{from}</if>
+     <if test="to !=null">AND `to`=#{to}</if>
      <if test="contractAddress !=null">AND `contract_address`=#{contractAddress}</if>
      <if test="status !=null">AND `status`=#{status}</if>
-     <if test="occurDate !=null">AND `occur_date`=#{occurDate}</if>
-     <if test="txHash !=null">AND `tx_hash`=#{txHash}</if>
-     <if test="times !=null">AND `times`=#{times}</if>
-     <if test="remark !=null">AND `remark`=#{remark}</if>
      <if test="timestamp !=null">AND `timestamp`=#{timestamp}</if>
      <if test="createTime !=null">AND `create_time`=#{createTime}</if>
      <if test="modifyTime !=null">AND `modify_time`=#{modifyTime}</if>
@@ -123,42 +103,29 @@
                      #{item}
             </foreach>
         </if>
-          <if test="includeUserIdList !=null and includeUserIdList.size()>0">
-              AND `user_id` IN
-              <foreach collection="includeUserIdList" item="item" open="(" close=")"
+          <if test="includeBlockNumberList !=null and includeBlockNumberList.size()>0">
+              AND `block_number` IN
+              <foreach collection="includeBlockNumberList" item="item" open="(" close=")"
                        separator=",">
                      #{item}
               </foreach>
           </if>
-        <if test="excludeUserIdList !=null and excludeUserIdList.size() >0">
-            AND `user_id` NOT IN
-            <foreach collection="excludeUserIdList" item="item" open="(" close=")" separator=",">
+        <if test="excludeBlockNumberList !=null and excludeBlockNumberList.size() >0">
+            AND `block_number` NOT IN
+            <foreach collection="excludeBlockNumberList" item="item" open="(" close=")" separator=",">
                      #{item}
             </foreach>
         </if>
-          <if test="includeSerialNoList !=null and includeSerialNoList.size()>0">
-              AND `serial_no` IN
-              <foreach collection="includeSerialNoList" item="item" open="(" close=")"
+          <if test="includeTxHashList !=null and includeTxHashList.size()>0">
+              AND `tx_hash` IN
+              <foreach collection="includeTxHashList" item="item" open="(" close=")"
                        separator=",">
                      #{item}
               </foreach>
           </if>
-        <if test="excludeSerialNoList !=null and excludeSerialNoList.size() >0">
-            AND `serial_no` NOT IN
-            <foreach collection="excludeSerialNoList" item="item" open="(" close=")" separator=",">
-                     #{item}
-            </foreach>
-        </if>
-          <if test="includeTypeList !=null and includeTypeList.size()>0">
-              AND `type` IN
-              <foreach collection="includeTypeList" item="item" open="(" close=")"
-                       separator=",">
-                     #{item}
-              </foreach>
-          </if>
-        <if test="excludeTypeList !=null and excludeTypeList.size() >0">
-            AND `type` NOT IN
-            <foreach collection="excludeTypeList" item="item" open="(" close=")" separator=",">
+        <if test="excludeTxHashList !=null and excludeTxHashList.size() >0">
+            AND `tx_hash` NOT IN
+            <foreach collection="excludeTxHashList" item="item" open="(" close=")" separator=",">
                      #{item}
             </foreach>
         </if>
@@ -175,29 +142,42 @@
                      #{item}
             </foreach>
         </if>
-          <if test="includeFromAddressList !=null and includeFromAddressList.size()>0">
-              AND `from_address` IN
-              <foreach collection="includeFromAddressList" item="item" open="(" close=")"
+          <if test="includeTypeList !=null and includeTypeList.size()>0">
+              AND `type` IN
+              <foreach collection="includeTypeList" item="item" open="(" close=")"
                        separator=",">
                      #{item}
               </foreach>
           </if>
-        <if test="excludeFromAddressList !=null and excludeFromAddressList.size() >0">
-            AND `from_address` NOT IN
-            <foreach collection="excludeFromAddressList" item="item" open="(" close=")" separator=",">
+        <if test="excludeTypeList !=null and excludeTypeList.size() >0">
+            AND `type` NOT IN
+            <foreach collection="excludeTypeList" item="item" open="(" close=")" separator=",">
                      #{item}
             </foreach>
         </if>
-          <if test="includeToAddressList !=null and includeToAddressList.size()>0">
-              AND `to_address` IN
-              <foreach collection="includeToAddressList" item="item" open="(" close=")"
+          <if test="includeFromList !=null and includeFromList.size()>0">
+              AND `from` IN
+              <foreach collection="includeFromList" item="item" open="(" close=")"
                        separator=",">
                      #{item}
               </foreach>
           </if>
-        <if test="excludeToAddressList !=null and excludeToAddressList.size() >0">
-            AND `to_address` NOT IN
-            <foreach collection="excludeToAddressList" item="item" open="(" close=")" separator=",">
+        <if test="excludeFromList !=null and excludeFromList.size() >0">
+            AND `from` NOT IN
+            <foreach collection="excludeFromList" item="item" open="(" close=")" separator=",">
+                     #{item}
+            </foreach>
+        </if>
+          <if test="includeToList !=null and includeToList.size()>0">
+              AND `to` IN
+              <foreach collection="includeToList" item="item" open="(" close=")"
+                       separator=",">
+                     #{item}
+              </foreach>
+          </if>
+        <if test="excludeToList !=null and excludeToList.size() >0">
+            AND `to` NOT IN
+            <foreach collection="excludeToList" item="item" open="(" close=")" separator=",">
                      #{item}
             </foreach>
         </if>
@@ -224,58 +204,6 @@
         <if test="excludeStatusList !=null and excludeStatusList.size() >0">
             AND `status` NOT IN
             <foreach collection="excludeStatusList" item="item" open="(" close=")" separator=",">
-                     #{item}
-            </foreach>
-        </if>
-          <if test="includeOccurDateList !=null and includeOccurDateList.size()>0">
-              AND `occur_date` IN
-              <foreach collection="includeOccurDateList" item="item" open="(" close=")"
-                       separator=",">
-                     #{item}
-              </foreach>
-          </if>
-        <if test="excludeOccurDateList !=null and excludeOccurDateList.size() >0">
-            AND `occur_date` NOT IN
-            <foreach collection="excludeOccurDateList" item="item" open="(" close=")" separator=",">
-                     #{item}
-            </foreach>
-        </if>
-          <if test="includeTxHashList !=null and includeTxHashList.size()>0">
-              AND `tx_hash` IN
-              <foreach collection="includeTxHashList" item="item" open="(" close=")"
-                       separator=",">
-                     #{item}
-              </foreach>
-          </if>
-        <if test="excludeTxHashList !=null and excludeTxHashList.size() >0">
-            AND `tx_hash` NOT IN
-            <foreach collection="excludeTxHashList" item="item" open="(" close=")" separator=",">
-                     #{item}
-            </foreach>
-        </if>
-          <if test="includeTimesList !=null and includeTimesList.size()>0">
-              AND `times` IN
-              <foreach collection="includeTimesList" item="item" open="(" close=")"
-                       separator=",">
-                     #{item}
-              </foreach>
-          </if>
-        <if test="excludeTimesList !=null and excludeTimesList.size() >0">
-            AND `times` NOT IN
-            <foreach collection="excludeTimesList" item="item" open="(" close=")" separator=",">
-                     #{item}
-            </foreach>
-        </if>
-          <if test="includeRemarkList !=null and includeRemarkList.size()>0">
-              AND `remark` IN
-              <foreach collection="includeRemarkList" item="item" open="(" close=")"
-                       separator=",">
-                     #{item}
-              </foreach>
-          </if>
-        <if test="excludeRemarkList !=null and excludeRemarkList.size() >0">
-            AND `remark` NOT IN
-            <foreach collection="excludeRemarkList" item="item" open="(" close=")" separator=",">
                      #{item}
             </foreach>
         </if>
@@ -336,7 +264,7 @@
     </sql>
 
     <insert id="insert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `usdt_tx_record`
+        INSERT INTO `erc20_usdt_tx_log`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <include refid="_field_list"/>
         </trim>
@@ -347,7 +275,7 @@
     </insert>
 
     <insert id="batchInsert" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO `usdt_tx_record`
+        INSERT INTO `erc20_usdt_tx_log`
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <include refid="_field_list"/>
         </trim>
@@ -359,49 +287,45 @@
         </foreach>
     </insert>
 
-    <select id="selectById" parameterType="java.lang.Long" resultMap="UsdtTxRecordMap">
+    <select id="selectById" parameterType="java.lang.Long" resultMap="Erc20UsdtTxLogMap">
         SELECT
         <include refid="_field_list"/>
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         WHERE `id` = #{id} limit 1
     </select>
 
     <select id="selectByIdForUpdate" parameterType="java.lang.Long"
-            resultMap="UsdtTxRecordMap">
+            resultMap="Erc20UsdtTxLogMap">
         SELECT
         <include refid="_field_list"/>
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         WHERE `id` = #{id} limit 1 FOR UPDATE
     </select>
 
     <delete id="deleteById" parameterType="java.lang.Long">
-        DELETE FROM `usdt_tx_record` WHERE `id` = #
+        DELETE FROM `erc20_usdt_tx_log` WHERE `id` = #
         {id} limit 1
     </delete>
 
     <delete id="deleteByParam" parameterType="map">
         DELETE
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </delete>
 
     <update id="updateById">
-        UPDATE `usdt_tx_record`
+        UPDATE `erc20_usdt_tx_log`
         <trim prefix="SET" suffixOverrides="," prefixOverrides=",">
-            <if test="userId !=null">`user_id`=#{userId},</if>
-            <if test="serialNo !=null">`serial_no`=#{serialNo},</if>
-            <if test="type !=null">`type`=#{type},</if>
+            <if test="blockNumber !=null">`block_number`=#{blockNumber},</if>
+            <if test="txHash !=null">`tx_hash`=#{txHash},</if>
             <if test="quantity !=null">`quantity`=#{quantity},</if>
-            <if test="fromAddress !=null">`from_address`=#{fromAddress},</if>
-            <if test="toAddress !=null">`to_address`=#{toAddress},</if>
+            <if test="type !=null">`type`=#{type},</if>
+            <if test="from !=null">`from`=#{from},</if>
+            <if test="to !=null">`to`=#{to},</if>
             <if test="contractAddress !=null">`contract_address`=#{contractAddress},</if>
             <if test="status !=null">`status`=#{status},</if>
-            <if test="occurDate !=null">`occur_date`=#{occurDate},</if>
-            <if test="txHash !=null">`tx_hash`=#{txHash},</if>
-            <if test="times !=null">`times`=#{times},</if>
-            <if test="remark !=null">`remark`=#{remark},</if>
             <if test="timestamp !=null">`timestamp`=#{timestamp},</if>
             <if test="createTime !=null">`create_time`=#{createTime},</if>
             <if test="modifyTime !=null">`modify_time`=#{modifyTime},</if>
@@ -410,20 +334,16 @@
     </update>
 
     <update id="updateByQuery">
-        UPDATE `usdt_tx_record`
+        UPDATE `erc20_usdt_tx_log`
         <trim prefix="SET" suffixOverrides="," prefixOverrides=",">
-            <if test="po.userId !=null">`user_id`=#{po.userId},</if>
-            <if test="po.serialNo !=null">`serial_no`=#{po.serialNo},</if>
-            <if test="po.type !=null">`type`=#{po.type},</if>
+            <if test="po.blockNumber !=null">`block_number`=#{po.blockNumber},</if>
+            <if test="po.txHash !=null">`tx_hash`=#{po.txHash},</if>
             <if test="po.quantity !=null">`quantity`=#{po.quantity},</if>
-            <if test="po.fromAddress !=null">`from_address`=#{po.fromAddress},</if>
-            <if test="po.toAddress !=null">`to_address`=#{po.toAddress},</if>
+            <if test="po.type !=null">`type`=#{po.type},</if>
+            <if test="po.from !=null">`from`=#{po.from},</if>
+            <if test="po.to !=null">`to`=#{po.to},</if>
             <if test="po.contractAddress !=null">`contract_address`=#{po.contractAddress},</if>
             <if test="po.status !=null">`status`=#{po.status},</if>
-            <if test="po.occurDate !=null">`occur_date`=#{po.occurDate},</if>
-            <if test="po.txHash !=null">`tx_hash`=#{po.txHash},</if>
-            <if test="po.times !=null">`times`=#{po.times},</if>
-            <if test="po.remark !=null">`remark`=#{po.remark},</if>
             <if test="po.timestamp !=null">`timestamp`=#{po.timestamp},</if>
             <if test="po.createTime !=null">`create_time`=#{po.createTime},</if>
             <if test="po.modifyTime !=null">`modify_time`=#{po.modifyTime},</if>
@@ -432,41 +352,29 @@
             <if test="query.id !=null">AND `id`=#
                 {query.id}
             </if>
-            <if test="query.userId !=null">AND `user_id`=#
-                {query.userId}
+            <if test="query.blockNumber !=null">AND `block_number`=#
+                {query.blockNumber}
             </if>
-            <if test="query.serialNo !=null">AND `serial_no`=#
-                {query.serialNo}
-            </if>
-            <if test="query.type !=null">AND `type`=#
-                {query.type}
+            <if test="query.txHash !=null">AND `tx_hash`=#
+                {query.txHash}
             </if>
             <if test="query.quantity !=null">AND `quantity`=#
                 {query.quantity}
             </if>
-            <if test="query.fromAddress !=null">AND `from_address`=#
-                {query.fromAddress}
+            <if test="query.type !=null">AND `type`=#
+                {query.type}
             </if>
-            <if test="query.toAddress !=null">AND `to_address`=#
-                {query.toAddress}
+            <if test="query.from !=null">AND `from`=#
+                {query.from}
+            </if>
+            <if test="query.to !=null">AND `to`=#
+                {query.to}
             </if>
             <if test="query.contractAddress !=null">AND `contract_address`=#
                 {query.contractAddress}
             </if>
             <if test="query.status !=null">AND `status`=#
                 {query.status}
-            </if>
-            <if test="query.occurDate !=null">AND `occur_date`=#
-                {query.occurDate}
-            </if>
-            <if test="query.txHash !=null">AND `tx_hash`=#
-                {query.txHash}
-            </if>
-            <if test="query.times !=null">AND `times`=#
-                {query.times}
-            </if>
-            <if test="query.remark !=null">AND `remark`=#
-                {query.remark}
             </if>
             <if test="query.timestamp !=null">AND `timestamp`=#
                 {query.timestamp}
@@ -480,10 +388,10 @@
         </where>
     </update>
 
-    <select id="queryListByParam" parameterType="map" resultMap="UsdtTxRecordMap">
+    <select id="queryListByParam" parameterType="map" resultMap="Erc20UsdtTxLogMap">
         SELECT
         <include refid="_field_list"/>
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -494,7 +402,7 @@
     <select id="queryCountByParam" parameterType="map" resultType="java.lang.Integer">
         SELECT
         COUNT(*)
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -504,7 +412,7 @@
     <select id="queryPkListByParam" parameterType="map" resultType="java.lang.Long">
         SELECT
         `id`
-        FROM `usdt_tx_record`
+        FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -514,7 +422,7 @@
 
     <!--single field list search-->
     <select id="queryIdListByParam" parameterType="map" resultType="java.lang.Long">
-        SELECT DISTINCT(`id`) FROM `usdt_tx_record`
+        SELECT DISTINCT(`id`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -522,80 +430,8 @@
         <include refid="_page_field"/>
     </select>
 
-    <select id="queryUserIdListByParam" parameterType="map" resultType="java.lang.Long">
-        SELECT DISTINCT(`user_id`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="querySerialNoListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`serial_no`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryTypeListByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT DISTINCT(`type`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryQuantityListByParam" parameterType="map" resultType="java.math.BigDecimal">
-        SELECT DISTINCT(`quantity`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryFromAddressListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`from_address`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryToAddressListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`to_address`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryContractAddressListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`contract_address`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryStatusListByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT DISTINCT(`status`) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-        <include refid="_common_sort"/>
-        <include refid="_page_field"/>
-    </select>
-
-    <select id="queryOccurDateListByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT DISTINCT(`occur_date`) FROM `usdt_tx_record`
+    <select id="queryBlockNumberListByParam" parameterType="map" resultType="java.lang.Long">
+        SELECT DISTINCT(`block_number`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -604,7 +440,7 @@
     </select>
 
     <select id="queryTxHashListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`tx_hash`) FROM `usdt_tx_record`
+        SELECT DISTINCT(`tx_hash`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -612,8 +448,8 @@
         <include refid="_page_field"/>
     </select>
 
-    <select id="queryTimesListByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT DISTINCT(`times`) FROM `usdt_tx_record`
+    <select id="queryQuantityListByParam" parameterType="map" resultType="java.math.BigDecimal">
+        SELECT DISTINCT(`quantity`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -621,8 +457,44 @@
         <include refid="_page_field"/>
     </select>
 
-    <select id="queryRemarkListByParam" parameterType="map" resultType="java.lang.String">
-        SELECT DISTINCT(`remark`) FROM `usdt_tx_record`
+    <select id="queryTypeListByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT DISTINCT(`type`) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryFromListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`from`) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryToListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`to`) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryContractAddressListByParam" parameterType="map" resultType="java.lang.String">
+        SELECT DISTINCT(`contract_address`) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+        <include refid="_common_sort"/>
+        <include refid="_page_field"/>
+    </select>
+
+    <select id="queryStatusListByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT DISTINCT(`status`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -631,7 +503,7 @@
     </select>
 
     <select id="queryTimestampListByParam" parameterType="map" resultType="java.lang.Long">
-        SELECT DISTINCT(`timestamp`) FROM `usdt_tx_record`
+        SELECT DISTINCT(`timestamp`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -640,7 +512,7 @@
     </select>
 
     <select id="queryCreateTimeListByParam" parameterType="map" resultType="java.util.Date">
-        SELECT DISTINCT(`create_time`) FROM `usdt_tx_record`
+        SELECT DISTINCT(`create_time`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -649,7 +521,7 @@
     </select>
 
     <select id="queryModifyTimeListByParam" parameterType="map" resultType="java.util.Date">
-        SELECT DISTINCT(`modify_time`) FROM `usdt_tx_record`
+        SELECT DISTINCT(`modify_time`) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
@@ -660,112 +532,84 @@
 
     <!--single field Count search-->
     <select id="queryIdCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`id`)) FROM `usdt_tx_record`
+        SELECT COUNT(DISTINCT(`id`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
-    <select id="queryUserIdCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`user_id`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="querySerialNoCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`serial_no`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryTypeCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`type`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryQuantityCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`quantity`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryFromAddressCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`from_address`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryToAddressCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`to_address`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryContractAddressCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`contract_address`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryStatusCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`status`)) FROM `usdt_tx_record`
-        <where>
-            <include refid="_common_where"/>
-        </where>
-    </select>
-
-    <select id="queryOccurDateCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`occur_date`)) FROM `usdt_tx_record`
+    <select id="queryBlockNumberCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`block_number`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
     <select id="queryTxHashCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`tx_hash`)) FROM `usdt_tx_record`
+        SELECT COUNT(DISTINCT(`tx_hash`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
-    <select id="queryTimesCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`times`)) FROM `usdt_tx_record`
+    <select id="queryQuantityCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`quantity`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
-    <select id="queryRemarkCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`remark`)) FROM `usdt_tx_record`
+    <select id="queryTypeCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`type`)) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryFromCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`from`)) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryToCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`to`)) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryContractAddressCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`contract_address`)) FROM `erc20_usdt_tx_log`
+        <where>
+            <include refid="_common_where"/>
+        </where>
+    </select>
+
+    <select id="queryStatusCountByParam" parameterType="map" resultType="java.lang.Integer">
+        SELECT COUNT(DISTINCT(`status`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
     <select id="queryTimestampCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`timestamp`)) FROM `usdt_tx_record`
+        SELECT COUNT(DISTINCT(`timestamp`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
     <select id="queryCreateTimeCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`create_time`)) FROM `usdt_tx_record`
+        SELECT COUNT(DISTINCT(`create_time`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>
     </select>
 
     <select id="queryModifyTimeCountByParam" parameterType="map" resultType="java.lang.Integer">
-        SELECT COUNT(DISTINCT(`modify_time`)) FROM `usdt_tx_record`
+        SELECT COUNT(DISTINCT(`modify_time`)) FROM `erc20_usdt_tx_log`
         <where>
             <include refid="_common_where"/>
         </where>

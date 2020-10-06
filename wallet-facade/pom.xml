@@ -9,23 +9,12 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>wallet-biz</artifactId>
+    <artifactId>wallet-facade</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>org.web3j</groupId>
-            <artifactId>core</artifactId>
-            <version>3.6.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.busgo.wallet</groupId>
-            <artifactId>wallet-inner</artifactId>
-            <version>1.0</version>
-        </dependency>
-        <dependency>
-            <groupId>com.busgo.wallet</groupId>
-            <artifactId>wallet-facade</artifactId>
+            <artifactId>wallet-commons</artifactId>
             <version>1.0</version>
         </dependency>
     </dependencies>

@@ -17,40 +17,43 @@ public class UsdtTxRecordQuery extends BaseQuery {
 	// 主键
 	private Long id;
 
-	// 币种
-	private String symbol;
+	// 用户id
+	private Long userId;
 
-	// 交易单号
+	// 唯一单据
 	private String serialNo;
 
-	// 区块号
-	private Long blockNumber;
+	// 类型 1-冲币 2-提币
+	private Integer type;
 
-	// 交易哈希值
-	private String txHash;
+	// 数量
+	private BigDecimal quantity;
 
-	// 金额
-	private BigDecimal amount;
+	// 转出地址
+	private String fromAddress;
 
-	// 重试次数
-	private Integer times;
-
-	// 1-冲币 2-提币
-	private Integer side;
-
-	// from 钱包地址
-	private String from;
-
-	// to 钱包地址
-	private String to;
+	// 转入地址
+	private String toAddress;
 
 	// 合约地址
 	private String contractAddress;
 
-	// 状态 1-待处理 2-成功 -1-失败
+	// 状态 1-处理中，2-成功 -1-失败 
 	private Integer status;
 
-	// 成交时间
+	// 发生日期 yyyyMMdd
+	private Integer occurDate;
+
+	// 交易哈希值
+	private String txHash;
+
+	// 重试次数
+	private Integer times;
+
+	// 备注
+	private String remark;
+
+	// 成交时间戳
 	private Long timestamp;
 
 	// 创建时间
@@ -65,59 +68,41 @@ public class UsdtTxRecordQuery extends BaseQuery {
     // exclude 主键
     private List<Long> excludeIdList;
 
-	// include 币种
-	private List<String> includeSymbolList;
+	// include 用户id
+	private List<Long> includeUserIdList;
 
-    // exclude 币种
-    private List<String> excludeSymbolList;
+    // exclude 用户id
+    private List<Long> excludeUserIdList;
 
-	// include 交易单号
+	// include 唯一单据
 	private List<String> includeSerialNoList;
 
-    // exclude 交易单号
+    // exclude 唯一单据
     private List<String> excludeSerialNoList;
 
-	// include 区块号
-	private List<Long> includeBlockNumberList;
+	// include 类型 1-冲币 2-提币
+	private List<Integer> includeTypeList;
 
-    // exclude 区块号
-    private List<Long> excludeBlockNumberList;
+    // exclude 类型 1-冲币 2-提币
+    private List<Integer> excludeTypeList;
 
-	// include 交易哈希值
-	private List<String> includeTxHashList;
+	// include 数量
+	private List<BigDecimal> includeQuantityList;
 
-    // exclude 交易哈希值
-    private List<String> excludeTxHashList;
+    // exclude 数量
+    private List<BigDecimal> excludeQuantityList;
 
-	// include 金额
-	private List<BigDecimal> includeAmountList;
+	// include 转出地址
+	private List<String> includeFromAddressList;
 
-    // exclude 金额
-    private List<BigDecimal> excludeAmountList;
+    // exclude 转出地址
+    private List<String> excludeFromAddressList;
 
-	// include 重试次数
-	private List<Integer> includeTimesList;
+	// include 转入地址
+	private List<String> includeToAddressList;
 
-    // exclude 重试次数
-    private List<Integer> excludeTimesList;
-
-	// include 1-冲币 2-提币
-	private List<Integer> includeSideList;
-
-    // exclude 1-冲币 2-提币
-    private List<Integer> excludeSideList;
-
-	// include from 钱包地址
-	private List<String> includeFromList;
-
-    // exclude from 钱包地址
-    private List<String> excludeFromList;
-
-	// include to 钱包地址
-	private List<String> includeToList;
-
-    // exclude to 钱包地址
-    private List<String> excludeToList;
+    // exclude 转入地址
+    private List<String> excludeToAddressList;
 
 	// include 合约地址
 	private List<String> includeContractAddressList;
@@ -125,16 +110,40 @@ public class UsdtTxRecordQuery extends BaseQuery {
     // exclude 合约地址
     private List<String> excludeContractAddressList;
 
-	// include 状态 1-待处理 2-成功 -1-失败
+	// include 状态 1-处理中，2-成功 -1-失败 
 	private List<Integer> includeStatusList;
 
-    // exclude 状态 1-待处理 2-成功 -1-失败
+    // exclude 状态 1-处理中，2-成功 -1-失败 
     private List<Integer> excludeStatusList;
 
-	// include 成交时间
+	// include 发生日期 yyyyMMdd
+	private List<Integer> includeOccurDateList;
+
+    // exclude 发生日期 yyyyMMdd
+    private List<Integer> excludeOccurDateList;
+
+	// include 交易哈希值
+	private List<String> includeTxHashList;
+
+    // exclude 交易哈希值
+    private List<String> excludeTxHashList;
+
+	// include 重试次数
+	private List<Integer> includeTimesList;
+
+    // exclude 重试次数
+    private List<Integer> excludeTimesList;
+
+	// include 备注
+	private List<String> includeRemarkList;
+
+    // exclude 备注
+    private List<String> excludeRemarkList;
+
+	// include 成交时间戳
 	private List<Long> includeTimestampList;
 
-    // exclude 成交时间
+    // exclude 成交时间戳
     private List<Long> excludeTimestampList;
 
 	// include 创建时间

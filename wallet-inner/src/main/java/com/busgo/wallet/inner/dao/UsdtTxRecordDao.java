@@ -21,67 +21,46 @@ public interface UsdtTxRecordDao extends BaseDao<Long,UsdtTxRecord,UsdtTxRecordQ
      List<Long> queryIdListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询币种列表
+     * 根据查询条件查询用户id列表
      * @param query 查询条件
      * @return
      */
-     List<String> querySymbolListByParam(UsdtTxRecordQuery query);
+     List<Long> queryUserIdListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询交易单号列表
+     * 根据查询条件查询唯一单据列表
      * @param query 查询条件
      * @return
      */
      List<String> querySerialNoListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询区块号列表
+     * 根据查询条件查询类型 1-冲币 2-提币列表
      * @param query 查询条件
      * @return
      */
-     List<Long> queryBlockNumberListByParam(UsdtTxRecordQuery query);
+     List<Integer> queryTypeListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询交易哈希值列表
+     * 根据查询条件查询数量列表
      * @param query 查询条件
      * @return
      */
-     List<String> queryTxHashListByParam(UsdtTxRecordQuery query);
+     List<BigDecimal> queryQuantityListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询金额列表
+     * 根据查询条件查询转出地址列表
      * @param query 查询条件
      * @return
      */
-     List<BigDecimal> queryAmountListByParam(UsdtTxRecordQuery query);
+     List<String> queryFromAddressListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询重试次数列表
+     * 根据查询条件查询转入地址列表
      * @param query 查询条件
      * @return
      */
-     List<Integer> queryTimesListByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询1-冲币 2-提币列表
-     * @param query 查询条件
-     * @return
-     */
-     List<Integer> querySideListByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询from 钱包地址列表
-     * @param query 查询条件
-     * @return
-     */
-     List<String> queryFromListByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询to 钱包地址列表
-     * @param query 查询条件
-     * @return
-     */
-     List<String> queryToListByParam(UsdtTxRecordQuery query);
+     List<String> queryToAddressListByParam(UsdtTxRecordQuery query);
 
      /***
      * 根据查询条件查询合约地址列表
@@ -91,14 +70,42 @@ public interface UsdtTxRecordDao extends BaseDao<Long,UsdtTxRecord,UsdtTxRecordQ
      List<String> queryContractAddressListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询状态 1-待处理 2-成功 -1-失败列表
+     * 根据查询条件查询状态 1-处理中，2-成功 -1-失败 列表
      * @param query 查询条件
      * @return
      */
      List<Integer> queryStatusListByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询成交时间列表
+     * 根据查询条件查询发生日期 yyyyMMdd列表
+     * @param query 查询条件
+     * @return
+     */
+     List<Integer> queryOccurDateListByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询交易哈希值列表
+     * @param query 查询条件
+     * @return
+     */
+     List<String> queryTxHashListByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询重试次数列表
+     * @param query 查询条件
+     * @return
+     */
+     List<Integer> queryTimesListByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询备注列表
+     * @param query 查询条件
+     * @return
+     */
+     List<String> queryRemarkListByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询成交时间戳列表
      * @param query 查询条件
      * @return
      */
@@ -127,67 +134,46 @@ public interface UsdtTxRecordDao extends BaseDao<Long,UsdtTxRecord,UsdtTxRecordQ
      int queryIdCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询币种总数
+     * 根据查询条件查询用户id总数
      * @param query 查询条件
      * @return
      */
-     int querySymbolCountByParam(UsdtTxRecordQuery query);
+     int queryUserIdCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询交易单号总数
+     * 根据查询条件查询唯一单据总数
      * @param query 查询条件
      * @return
      */
      int querySerialNoCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询区块号总数
+     * 根据查询条件查询类型 1-冲币 2-提币总数
      * @param query 查询条件
      * @return
      */
-     int queryBlockNumberCountByParam(UsdtTxRecordQuery query);
+     int queryTypeCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询交易哈希值总数
+     * 根据查询条件查询数量总数
      * @param query 查询条件
      * @return
      */
-     int queryTxHashCountByParam(UsdtTxRecordQuery query);
+     int queryQuantityCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询金额总数
+     * 根据查询条件查询转出地址总数
      * @param query 查询条件
      * @return
      */
-     int queryAmountCountByParam(UsdtTxRecordQuery query);
+     int queryFromAddressCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询重试次数总数
+     * 根据查询条件查询转入地址总数
      * @param query 查询条件
      * @return
      */
-     int queryTimesCountByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询1-冲币 2-提币总数
-     * @param query 查询条件
-     * @return
-     */
-     int querySideCountByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询from 钱包地址总数
-     * @param query 查询条件
-     * @return
-     */
-     int queryFromCountByParam(UsdtTxRecordQuery query);
-
-     /***
-     * 根据查询条件查询to 钱包地址总数
-     * @param query 查询条件
-     * @return
-     */
-     int queryToCountByParam(UsdtTxRecordQuery query);
+     int queryToAddressCountByParam(UsdtTxRecordQuery query);
 
      /***
      * 根据查询条件查询合约地址总数
@@ -197,14 +183,42 @@ public interface UsdtTxRecordDao extends BaseDao<Long,UsdtTxRecord,UsdtTxRecordQ
      int queryContractAddressCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询状态 1-待处理 2-成功 -1-失败总数
+     * 根据查询条件查询状态 1-处理中，2-成功 -1-失败 总数
      * @param query 查询条件
      * @return
      */
      int queryStatusCountByParam(UsdtTxRecordQuery query);
 
      /***
-     * 根据查询条件查询成交时间总数
+     * 根据查询条件查询发生日期 yyyyMMdd总数
+     * @param query 查询条件
+     * @return
+     */
+     int queryOccurDateCountByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询交易哈希值总数
+     * @param query 查询条件
+     * @return
+     */
+     int queryTxHashCountByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询重试次数总数
+     * @param query 查询条件
+     * @return
+     */
+     int queryTimesCountByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询备注总数
+     * @param query 查询条件
+     * @return
+     */
+     int queryRemarkCountByParam(UsdtTxRecordQuery query);
+
+     /***
+     * 根据查询条件查询成交时间戳总数
      * @param query 查询条件
      * @return
      */

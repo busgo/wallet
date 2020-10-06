@@ -13,6 +13,7 @@
         <module>wallet-web</module>
         <module>wallet-inner</module>
         <module>wallet-commons</module>
+        <module>wallet-facade</module>
     </modules>
 
 

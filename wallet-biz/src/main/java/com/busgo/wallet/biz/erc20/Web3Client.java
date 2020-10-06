@@ -2,13 +2,13 @@ package com.busgo.wallet.biz.erc20;
 
 import com.alibaba.fastjson.JSON;
 import com.busgo.commons.util.KeyGeneratorUtils;
+import com.busgo.wallet.biz.service.Erc20UsdtTxLogService;
 import com.busgo.wallet.biz.service.UsdtTxRecordService;
-import com.busgo.wallet.commons.constant.SymbolCode;
-import com.busgo.wallet.commons.constant.UsdtTxRecordStatus;
-import com.busgo.wallet.commons.constant.UsdtTxSide;
+import com.busgo.wallet.commons.constant.Erc20UsdtTxLogStatus;
+import com.busgo.wallet.commons.constant.UsdtTxRecordType;
 import com.busgo.wallet.commons.exception.WalletBizException;
 import com.busgo.wallet.inner.dao.UserWalletDao;
-import com.busgo.wallet.inner.model.UsdtTxRecord;
+import com.busgo.wallet.inner.model.Erc20UsdtTxLog;
 import com.busgo.wallet.inner.model.UserWallet;
 import com.busgo.wallet.inner.query.UserWalletQuery;
 import lombok.extern.slf4j.Slf4j;
@@ -49,7 +49,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -100,7 +99,7 @@ public class Web3Client implements InitializingBean {
         this.subscribe();
 
 
-      //  this.transferERC20USDT("0xB02a7e1b037Fbad48Ea3E75aE9292E048f084884", "0x9794Db737Aad50A82287781ed7e06CCB03F3064C", new BigDecimal("1.001"));
+        //  this.transferERC20USDT("0xB02a7e1b037Fbad48Ea3E75aE9292E048f084884", "0x9794Db737Aad50A82287781ed7e06CCB03F3064C", new BigDecimal("1.001"));
     }
 
 
@@ -145,7 +144,6 @@ public class Web3Client implements InitializingBean {
 
             try {
 
-
                 EthBlock.Block block = this.getBlockByNumber(tx.getBlockNumber());
                 long timestamp = block.getTimestamp().longValue();
 
@@ -154,30 +152,24 @@ public class Web3Client implements InitializingBean {
                 String fromAddress = "0x" + topics.get(1).substring(26);
                 String toAddress = "0x" + topics.get(2).substring(26);
 
-                Integer side = this.getTxSide(fromAddress, toAddress);
+                Integer type = this.getTxType(fromAddress, toAddress);
 
-                UsdtTxRecord r = UsdtTxRecord.builder()
-                        .symbol(SymbolCode.USDT)
+                Erc20UsdtTxLog txLog = Erc20UsdtTxLog.builder()
                         .blockNumber(tx.getBlockNumber().longValue())
-                        .amount(amount)
+                        .quantity(amount)
                         .contractAddress(contractAddress)
-                        .createTime(new Date())
-                        .serialNo(KeyGeneratorUtils.generateSerialNo())
                         .from(fromAddress)
-                        .times(0)
-                        .status(UsdtTxRecordStatus.No)
-                        .side(side)
+                        .status(Erc20UsdtTxLogStatus.Success)
+                        .type(type)
                         .timestamp(timestamp)
                         .to(toAddress)
                         .txHash(tx.getTransactionHash())
                         .build();
-
-                log.info("接收到 USDT 对应合约地址:{},交易记录:{}", this.contractAddress, r);
-                this.usdtTxRecordService.storeTxRecord(r);
+                log.info("接收到 USDT 对应合约地址:{},交易记录:{}", this.contractAddress, txLog);
+                this.usdtTxRecordService.dealTxLog(txLog,type);
             } catch (Exception e) {
                 log.error(" tx:{}" + JSON.toJSONString(tx), e);
             }
-
         });
 
 
@@ -193,7 +185,7 @@ public class Web3Client implements InitializingBean {
      * @param toAddress   转入地址
      * @return
      */
-    private Integer getTxSide(String fromAddress, String toAddress) {
+    private Integer getTxType(String fromAddress, String toAddress) {
 
         UserWalletQuery query = new UserWalletQuery();
         query.setAddress(toAddress);
@@ -202,13 +194,13 @@ public class Web3Client implements InitializingBean {
         List<UserWallet> wallets = this.userWalletDao.queryListByParam(query);
         if (CollectionUtils.isEmpty(wallets)) {
             if (fromAddress.contains(this.walletAddress)) {
-                return UsdtTxSide.Withdraw;
+                return UsdtTxRecordType.Withdraw;
             } else {
-                return UsdtTxSide.None;
+                return UsdtTxRecordType.None;
             }
         }
 
-        return UsdtTxSide.ReChange;
+        return UsdtTxRecordType.ReChange;
     }
 
 

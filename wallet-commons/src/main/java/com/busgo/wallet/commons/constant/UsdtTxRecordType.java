@@ -4,7 +4,7 @@ package com.busgo.wallet.commons.constant;
  * @author busgo
  * @date 2020-10-05 12:03
  **/
-public interface UsdtTxSide {
+public interface UsdtTxRecordType {
 
 
     // 冲币
