@@ -1,22 +1,22 @@
 package com.busgo.wallet.biz.erc20;
 
 import com.alibaba.fastjson.JSON;
-import com.busgo.commons.util.KeyGeneratorUtils;
-import com.busgo.wallet.biz.service.Erc20UsdtTxLogService;
+import com.busgo.commons.constant.wallet.Erc20UsdtTxLogStatus;
 import com.busgo.wallet.biz.service.UsdtTxRecordService;
-import com.busgo.wallet.commons.constant.Erc20UsdtTxLogStatus;
+import com.busgo.wallet.commons.constant.SendTransactionStatus;
 import com.busgo.wallet.commons.constant.UsdtTxRecordType;
 import com.busgo.wallet.commons.exception.WalletBizException;
 import com.busgo.wallet.inner.dao.UserWalletDao;
 import com.busgo.wallet.inner.model.Erc20UsdtTxLog;
 import com.busgo.wallet.inner.model.UserWallet;
 import com.busgo.wallet.inner.query.UserWalletQuery;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import org.springframework.util.CollectionUtils;
 import org.web3j.abi.EventEncoder;
 import org.web3j.abi.FunctionEncoder;
@@ -26,10 +26,7 @@ import org.web3j.abi.datatypes.Event;
 import org.web3j.abi.datatypes.Function;
 import org.web3j.abi.datatypes.Type;
 import org.web3j.abi.datatypes.generated.Uint256;
-import org.web3j.crypto.Credentials;
-import org.web3j.crypto.RawTransaction;
-import org.web3j.crypto.TransactionEncoder;
-import org.web3j.crypto.WalletUtils;
+import org.web3j.crypto.*;
 import org.web3j.protocol.Web3j;
 import org.web3j.protocol.admin.Admin;
 import org.web3j.protocol.core.DefaultBlockParameter;
@@ -41,9 +38,11 @@ import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
 import org.web3j.tx.Contract;
+import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
@@ -58,7 +57,7 @@ import java.util.concurrent.ExecutionException;
  **/
 @Component
 @Slf4j
-public class Web3Client implements InitializingBean {
+public class Web3JClient implements InitializingBean {
 
     @Autowired
     private UserWalletDao userWalletDao;
@@ -68,11 +67,13 @@ public class Web3Client implements InitializingBean {
     private Admin admin;
 
     @Value("${erc20.usdt.contract.address}")
+    @Getter
     private String contractAddress;
 
     @Value("${web3j.rpc.url}")
     private String rpcUrl;
 
+    @Getter
     private String walletAddress;
 
     @Value("${erc20.usdt.wallet.privateKey.password}")
@@ -81,7 +82,12 @@ public class Web3Client implements InitializingBean {
     @Value("${erc20.usdt.wallet.privateKey.path}")
     private String usdtWalletPrivateKeyPath;
 
+    @Value("${erc20.usdt.wallet.path}")
+    private String walletStorePath;
+
     private Credentials credentials;
+
+    private File walletDestinationDirectory;
 
 
     @Autowired
@@ -92,14 +98,21 @@ public class Web3Client implements InitializingBean {
 
         HttpService httpService = new HttpService(this.rpcUrl);
         this.web3j = Web3j.build(httpService);
+
+        Assert.hasText(this.walletStorePath, "erc20.usdt.wallet.path  not null");
+
+        this.walletDestinationDirectory = new File(this.walletStorePath);
+        if (!this.walletDestinationDirectory.exists()) {
+            this.walletDestinationDirectory.mkdirs();
+        }
         this.admin = Admin.build(httpService);
         //加载转账所需的凭证，用私钥
         this.credentials = WalletUtils.loadCredentials(this.usdtWalletPrivateKeyPassword, this.usdtWalletPrivateKeyPath);
         this.walletAddress = this.credentials.getAddress();
+
+        // 订阅 erc20-usdt 交易日志
         this.subscribe();
-
-
-        //  this.transferERC20USDT("0xB02a7e1b037Fbad48Ea3E75aE9292E048f084884", "0x9794Db737Aad50A82287781ed7e06CCB03F3064C", new BigDecimal("1.001"));
+        // this.transfer("0x9794Db737Aad50A82287781ed7e06CCB03F3064C", new BigDecimal("1.001"));
     }
 
 
@@ -130,7 +143,7 @@ public class Web3Client implements InitializingBean {
                         new TypeReference<Address>(true) {
                         },
                         new TypeReference<Address>(true) {
-                        }, new TypeReference<Uint256>(false) {
+                        }, new TypeReference<Uint256>(true) {
                         }
                 )
         );
@@ -147,16 +160,16 @@ public class Web3Client implements InitializingBean {
                 EthBlock.Block block = this.getBlockByNumber(tx.getBlockNumber());
                 long timestamp = block.getTimestamp().longValue();
 
-                BigDecimal amount = new BigDecimal(new BigInteger(tx.getData().substring(2), 16)).divide(BigDecimal.valueOf(1000000000000000000.0), 18, BigDecimal.ROUND_HALF_EVEN);
+
+                BigDecimal quantity = Convert.fromWei(new BigInteger(tx.getData().substring(2), 16).toString(), Convert.Unit.MWEI);
                 List<String> topics = tx.getTopics();
                 String fromAddress = "0x" + topics.get(1).substring(26);
                 String toAddress = "0x" + topics.get(2).substring(26);
 
                 Integer type = this.getTxType(fromAddress, toAddress);
-
                 Erc20UsdtTxLog txLog = Erc20UsdtTxLog.builder()
                         .blockNumber(tx.getBlockNumber().longValue())
-                        .quantity(amount)
+                        .quantity(quantity)
                         .contractAddress(contractAddress)
                         .from(fromAddress)
                         .status(Erc20UsdtTxLogStatus.Success)
@@ -166,7 +179,7 @@ public class Web3Client implements InitializingBean {
                         .txHash(tx.getTransactionHash())
                         .build();
                 log.info("接收到 USDT 对应合约地址:{},交易记录:{}", this.contractAddress, txLog);
-                this.usdtTxRecordService.dealTxLog(txLog,type);
+                this.usdtTxRecordService.dealTxLog(txLog, type);
             } catch (Exception e) {
                 log.error(" tx:{}" + JSON.toJSONString(tx), e);
             }
@@ -238,9 +251,10 @@ public class Web3Client implements InitializingBean {
      * @return 钱包地址
      * @throws IOException
      */
-    public String createAccount(String password) throws IOException {
+    public String createAccount(String password) throws Exception {
 
-        return this.admin.personalNewAccount(password).send().getAccountId();
+        String walletFileName = WalletUtils.generateNewWalletFile(password, this.walletDestinationDirectory);
+        return "0x" + walletFileName.split("--")[2];
 
     }
 
@@ -259,44 +273,46 @@ public class Web3Client implements InitializingBean {
     /**
      * 指定地址转出到指定地址
      *
-     * @param from     转出地址
-     * @param to       转入地址
+     * @param address  转入地址
      * @param quantity 转出数量
      * @return
      */
-    public String transferERC20USDT(String from, String to, BigDecimal quantity) {
+    public String transfer(String address, BigDecimal quantity) {
 
 
-        log.info("开始转账 ---->from:{},to:{},quantity:{}", from, to, quantity);
-        BigInteger amount = Convert.toWei(quantity, Convert.Unit.ETHER).toBigInteger();
-        log.info("开始转账[单位换算后] ---->from:{},to:{},amount:{}", from, to, amount);
-        //获取nonce，交易笔数
-        BigInteger nonce = getNonce(from);
-        //get gasPrice
-        BigInteger gasPrice = getGasPrice();
-        BigInteger gasLimit = Contract.GAS_LIMIT;
-        //创建RawTransaction交易对象
-        Function function = new Function(
-                "transfer",
-                Arrays.asList(new Address(to), new Uint256(amount)),
-                Collections.singletonList(new TypeReference<Type>() {
-                }));
+        try {
 
-        String encodedFunction = FunctionEncoder.encode(function);
+            log.info("开始转账 ---->from:{},to:{},quantity:{}", this.walletAddress, address, quantity);
+            BigInteger amount = Convert.toWei(quantity, Convert.Unit.MWEI).toBigInteger();
+            log.info("开始转账[单位换算后] ---->from:{},to:{},amount:{}", this.walletAddress, address, amount);
+            //获取nonce，交易笔数
+            BigInteger nonce = getNonce(this.walletAddress);
+            //get gasPrice
+            BigInteger gasPrice = getGasPrice();
+            BigInteger gasLimit = DefaultGasProvider.GAS_LIMIT;
+            //创建RawTransaction交易对象
+            Function function = new Function(
+                    "transfer",
+                    Arrays.asList(new Address(address), new Uint256(amount)),
+                    Collections.singletonList(new TypeReference<Type>() {
+                    }));
+
+            String encodedFunction = FunctionEncoder.encode(function);
 
 
-        RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit,
-                this.contractAddress, encodedFunction);
+            RawTransaction rawTransaction = RawTransaction.createTransaction(nonce, gasPrice, gasLimit,
+                    this.contractAddress, encodedFunction);
 
-        //签名Transaction，这里要对交易做签名
-        byte[] signMessage = TransactionEncoder.signMessage(rawTransaction, this.credentials);
+            //签名Transaction，这里要对交易做签名
+            byte[] signMessage = TransactionEncoder.signMessage(rawTransaction, this.credentials);
 
-        String hexValue = Numeric.toHexString(signMessage);
+            return Numeric.toHexString(signMessage);
 
-        //发送交易
-        String txHash = sendTransaction(hexValue);
+        } catch (Exception e) {
+            log.error("transferERC20USDT unknow  address:{},quantity:{}", address, quantity, e);
+            throw new WalletBizException(-1, "transfer fail", e);
+        }
 
-        return txHash;
     }
 
 
@@ -306,21 +322,26 @@ public class Web3Client implements InitializingBean {
      * @param signedTransactionData 交易签名数据
      * @return
      */
-    private String sendTransaction(String signedTransactionData) {
-        String txHash = StringUtils.EMPTY;
+    public Integer sendTransaction(String signedTransactionData) {
+
+
+        String txHash = Hash.sha3(signedTransactionData);
+        EthSendTransaction transaction = null;
         try {
-            EthSendTransaction transaction = web3j.ethSendRawTransaction(signedTransactionData).sendAsync().get();
+            transaction = web3j.ethSendRawTransaction(signedTransactionData).sendAsync().get();
             if (transaction.hasError()) {
                 log.error("Web3j --> ethSendRawTransaction:" + transaction.getError().getMessage());
-                return transaction.getTransactionHash();
+                return SendTransactionStatus.Error;
             }
-            log.info("转账成功----> signedTransactionData:{},tx_hash:{}", signedTransactionData, transaction.getTransactionHash());
+            log.info("转账成功----> signedTransactionData:{},tx_hash:{},return tx_hash:{}", signedTransactionData, txHash, transaction.getTransactionHash());
 
-            return transaction.getTransactionHash();
-        } catch (InterruptedException | ExecutionException e) {
-            log.error("Web3j --> ethSendRawTransaction:" + e.getMessage());
+            return SendTransactionStatus.Success;
+        } catch (Exception e) {
+            log.error("send transaction fail tx_hash:{},signedTransactionData:{}", txHash, signedTransactionData);
+            return SendTransactionStatus.Unknow;
+
         }
-        return txHash;
+
     }
 
     /**
@@ -333,9 +354,8 @@ public class Web3Client implements InitializingBean {
         try {
             return web3j.ethGetTransactionCount(from, DefaultBlockParameterName.LATEST).send().getTransactionCount();
         } catch (IOException e) {
-            e.printStackTrace();
             log.error("Web3j --> getNonce: from:{}", from, e);
-            throw new WalletBizException(-1, "获取手续费价格异常", e);
+            throw new WalletBizException(-1, "获取 nonce 异常", e);
         }
     }
 

@@ -21,14 +21,14 @@
     </dependencies>
 
     <build>
-        <finalName>market</finalName>
+        <finalName>wallet</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
                     <!-- 指定该Main Class为全局的唯一入口 -->
-                    <mainClass>com.busgo.market.MarketApplication</mainClass>
+                    <mainClass>com.busgo.wallet.WalletApplication</mainClass>
                     <layout>ZIP</layout>
                 </configuration>
                 <executions>

@@ -2,7 +2,6 @@ package com.busgo.wallet.biz.facade.impl;
 
 import com.busgo.commons.lang.Result;
 import com.busgo.commons.lang.ResultCode;
-import com.busgo.wallet.biz.erc20.Web3Client;
 import com.busgo.wallet.biz.service.UserWalletService;
 import com.busgo.wallet.commons.exception.WalletBizException;
 import com.busgo.wallet.facade.WalletFacade;

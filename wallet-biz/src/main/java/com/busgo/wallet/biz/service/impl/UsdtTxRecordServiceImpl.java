@@ -64,15 +64,8 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
     public void dealTxLog(Erc20UsdtTxLog txLog, Integer type) {
 
 
-        if (this.hasExistRecordByTxHash(txLog.getTxHash())) {
-            log.warn("当前usdt交易记录已存在 usdt_tx_record中 txlog:{},type:{}", txLog, type);
-            return;
-        }
-
-
-        // 存储 usdt 交易 log
+        // 存储交易日志
         this.erc20UsdtTxLogService.storeTxLog(txLog);
-
 
         if (type == UsdtTxRecordType.Withdraw) {
 
@@ -89,6 +82,24 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
         }
 
 
+    }
+
+    @Override
+    public int queryCountByParam(UsdtTxRecordQuery query) {
+        return this.usdtTxRecordDao.queryCountByParam(query);
+    }
+
+    @Override
+    public List<UsdtTxRecord> queryListByParam(UsdtTxRecordQuery query) {
+        return this.usdtTxRecordDao.queryListByParam(query);
+    }
+
+    @Override
+    public int storeTxRecord(UsdtTxRecord txRecord) {
+
+        txRecord.setCreateTime(new Date());
+
+        return this.usdtTxRecordDao.insert(txRecord);
     }
 
 
@@ -108,22 +119,29 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
             return;
         }
 
+        String txHash = txLog.getTxHash();
+        UsdtTxRecord usdtTxRecord = this.findUSDTTxRecordByTxHash(txHash);
+        if (usdtTxRecord != null) {
+            log.warn("[处理冲币交易日志] 冲币交易日志 tx_log:{},找到对应的冲币记录单,直接返回", txLog);
+            return;
+        }
+
+
         UsdtTxRecord txRecord = UsdtTxRecord.builder()
                 .contractAddress(txLog.getContractAddress())
                 .fromAddress(txLog.getFrom())
                 .toAddress(toAddress)
-                .createTime(new Date())
                 .occurDate(DateUtils.getDateAsInt(new Date()))
                 .quantity(txLog.getQuantity())
                 .serialNo(KeyGeneratorUtils.generateSerialNo())
                 .status(UsdtTxRecordStatus.No)
                 .times(0)
                 .timestamp(txLog.getTimestamp())
-                .txHash(txLog.getTxHash())
+                .txHash(txHash)
                 .type(UsdtTxRecordType.ReChange)
-                .userId(wallet.getUserId()).build();
-
-        this.usdtTxRecordDao.insert(txRecord);
+                .userId(wallet.getUserId())
+                .build();
+        this.storeTxRecord(txRecord);
         log.info("[处理冲交易日志] 冲币交易日志 tx_log:{},已生成冲币单:{}", txLog, txRecord);
 
     }
@@ -149,7 +167,7 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
         record.setId(usdtTxRecord.getId());
         record.setStatus(UsdtTxRecordStatus.Success);
         record.setModifyTime(new Date());
-        this.usdtTxRecordDao.updateById(usdtTxRecord);
+        this.usdtTxRecordDao.updateById(record);
 
         log.info("[处理提币交易日志] 提币交易日志 tx_log:{},找到对应的提币记录单:{} 并处理成功", txLog, usdtTxRecord);
     }

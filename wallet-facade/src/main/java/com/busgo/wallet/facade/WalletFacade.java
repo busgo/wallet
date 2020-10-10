@@ -35,7 +35,7 @@ public interface WalletFacade {
 
 
     /**
-     * 提币
+     * 提币申请
      *
      * @param req 请求
      * @return

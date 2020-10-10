@@ -19,7 +19,7 @@ public interface UserWalletService {
      * @param userId 用户id
      * @return
      */
-    UserWallet createWalletAccount(Long userId) throws IOException;
+    UserWallet createWalletAccount(Long userId) throws Exception;
 
     /**
      * 根据用户id 查询钱包账户
@@ -27,7 +27,7 @@ public interface UserWalletService {
      * @param userId 用户id
      * @return
      */
-    UserWallet queryWalletAccountByUserId(Long userId) throws IOException;
+    UserWallet queryWalletAccountByUserId(Long userId) throws Exception;
 
     /**
      * 提币
