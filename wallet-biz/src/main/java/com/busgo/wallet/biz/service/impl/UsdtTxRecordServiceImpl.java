@@ -1,12 +1,12 @@
 package com.busgo.wallet.biz.service.impl;
 
+import com.busgo.commons.enums.wallet.UsdtTxRecordStatusEnum;
+import com.busgo.commons.enums.wallet.UsdtTxRecordTypeEnum;
 import com.busgo.commons.util.DateUtils;
 import com.busgo.commons.util.KeyGeneratorUtils;
 import com.busgo.wallet.biz.service.Erc20UsdtTxLogService;
 import com.busgo.wallet.biz.service.UsdtTxRecordService;
 import com.busgo.wallet.biz.service.UserWalletService;
-import com.busgo.wallet.commons.constant.UsdtTxRecordStatus;
-import com.busgo.wallet.commons.constant.UsdtTxRecordType;
 import com.busgo.wallet.inner.dao.UsdtTxRecordDao;
 import com.busgo.wallet.inner.model.Erc20UsdtTxLog;
 import com.busgo.wallet.inner.model.UsdtTxRecord;
@@ -58,7 +58,7 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
      *
      * @param txLog usdt 交易记录日志
      * @param type  类型
-     * @see UsdtTxRecordType
+     * @see UsdtTxRecordTypeEnum
      */
     @Transactional
     public void dealTxLog(Erc20UsdtTxLog txLog, Integer type) {
@@ -67,12 +67,12 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
         // 存储交易日志
         this.erc20UsdtTxLogService.storeTxLog(txLog);
 
-        if (type == UsdtTxRecordType.Withdraw) {
+        if (type == UsdtTxRecordTypeEnum.Withdraw.getType()) {
 
             log.info("开始处理 USDT 提币交易日志 tx_log:{}", txLog);
             this.dealWithdraw(txLog);
 
-        } else if (type == UsdtTxRecordType.ReChange) {
+        } else if (type == UsdtTxRecordTypeEnum.ReChange.getType()) {
 
             log.info("开始处理 USDT 冲币交易日志 tx_log:{}", txLog);
             this.dealRecharge(txLog);
@@ -134,11 +134,11 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
                 .occurDate(DateUtils.getDateAsInt(new Date()))
                 .quantity(txLog.getQuantity())
                 .serialNo(KeyGeneratorUtils.generateSerialNo())
-                .status(UsdtTxRecordStatus.No)
+                .status(UsdtTxRecordStatusEnum.No.getStatus())
                 .times(0)
                 .timestamp(txLog.getTimestamp())
                 .txHash(txHash)
-                .type(UsdtTxRecordType.ReChange)
+                .type(UsdtTxRecordTypeEnum.ReChange.getType())
                 .userId(wallet.getUserId())
                 .build();
         this.storeTxRecord(txRecord);
@@ -158,14 +158,14 @@ public class UsdtTxRecordServiceImpl implements UsdtTxRecordService {
         if (usdtTxRecord == null) {
             log.warn("[处理提币交易日志] 提币交易日志 tx_log:{},没有找到对应的提币记录单", txLog);
             return;
-        } else if (usdtTxRecord.getStatus() != UsdtTxRecordStatus.No) {
+        } else if (usdtTxRecord.getStatus() != UsdtTxRecordStatusEnum.No.getStatus()) {
             log.warn("[处理提币交易日志] 提币交易日志 tx_log:{},找到对应的提币记录单:{} 不是提币中的状态", txLog, usdtTxRecord);
             return;
         }
 
         UsdtTxRecord record = new UsdtTxRecord();
         record.setId(usdtTxRecord.getId());
-        record.setStatus(UsdtTxRecordStatus.Success);
+        record.setStatus(UsdtTxRecordStatusEnum.Success.getStatus());
         record.setModifyTime(new Date());
         this.usdtTxRecordDao.updateById(record);
 

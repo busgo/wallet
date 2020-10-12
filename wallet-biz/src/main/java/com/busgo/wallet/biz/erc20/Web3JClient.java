@@ -1,10 +1,10 @@
 package com.busgo.wallet.biz.erc20;
 
 import com.alibaba.fastjson.JSON;
-import com.busgo.commons.constant.wallet.Erc20UsdtTxLogStatus;
+import com.busgo.commons.enums.wallet.Erc20UsdtTxLogStatusEnum;
+import com.busgo.commons.enums.wallet.UsdtTxRecordTypeEnum;
 import com.busgo.wallet.biz.service.UsdtTxRecordService;
 import com.busgo.wallet.commons.constant.SendTransactionStatus;
-import com.busgo.wallet.commons.constant.UsdtTxRecordType;
 import com.busgo.wallet.commons.exception.WalletBizException;
 import com.busgo.wallet.inner.dao.UserWalletDao;
 import com.busgo.wallet.inner.model.Erc20UsdtTxLog;
@@ -37,7 +37,6 @@ import org.web3j.protocol.core.methods.response.EthBlockNumber;
 import org.web3j.protocol.core.methods.response.EthGasPrice;
 import org.web3j.protocol.core.methods.response.EthSendTransaction;
 import org.web3j.protocol.http.HttpService;
-import org.web3j.tx.Contract;
 import org.web3j.tx.gas.DefaultGasProvider;
 import org.web3j.utils.Convert;
 import org.web3j.utils.Numeric;
@@ -172,7 +171,7 @@ public class Web3JClient implements InitializingBean {
                         .quantity(quantity)
                         .contractAddress(contractAddress)
                         .from(fromAddress)
-                        .status(Erc20UsdtTxLogStatus.Success)
+                        .status(Erc20UsdtTxLogStatusEnum.Success.getStatus())
                         .type(type)
                         .timestamp(timestamp)
                         .to(toAddress)
@@ -207,13 +206,13 @@ public class Web3JClient implements InitializingBean {
         List<UserWallet> wallets = this.userWalletDao.queryListByParam(query);
         if (CollectionUtils.isEmpty(wallets)) {
             if (fromAddress.contains(this.walletAddress)) {
-                return UsdtTxRecordType.Withdraw;
+                return UsdtTxRecordTypeEnum.Withdraw.getType();
             } else {
-                return UsdtTxRecordType.None;
+                return UsdtTxRecordTypeEnum.None.getType();
             }
         }
 
-        return UsdtTxRecordType.ReChange;
+        return UsdtTxRecordTypeEnum.ReChange.getType();
     }
 
 

@@ -1,12 +1,12 @@
 package com.busgo.wallet.biz.service.impl;
 
-import com.busgo.commons.constant.wallet.UsdtTxRecordStatus;
-import com.busgo.commons.constant.wallet.UsdtTxRecordType;
+import com.busgo.commons.enums.ball.SymbolCodeEnum;
+import com.busgo.commons.enums.wallet.UsdtTxRecordStatusEnum;
+import com.busgo.commons.enums.wallet.UsdtTxRecordTypeEnum;
 import com.busgo.commons.util.DateUtils;
 import com.busgo.wallet.biz.erc20.Web3JClient;
 import com.busgo.wallet.biz.service.UserWalletService;
 import com.busgo.wallet.commons.constant.SendTransactionStatus;
-import com.busgo.wallet.commons.constant.SymbolCode;
 import com.busgo.wallet.commons.exception.WalletBizException;
 import com.busgo.wallet.facade.req.TransferUSDTReq;
 import com.busgo.wallet.facade.res.TransferUSDTRes;
@@ -63,7 +63,7 @@ public class UserWalletServiceImpl implements UserWalletService {
         String address = this.web3JClient.createAccount(password);
         wallet = UserWallet.builder().address(address).balance(BigDecimal.ZERO)
                 .password(password)
-                .symbol(SymbolCode.USDT)
+                .symbol(SymbolCodeEnum.USDT.getSymbol())
                 .userId(userId)
                 .createTime(new Date())
                 .build();
@@ -112,14 +112,14 @@ public class UserWalletServiceImpl implements UserWalletService {
         String txHash = Hash.sha3(signedTransactionData);
         UsdtTxRecord record = UsdtTxRecord.builder()
                 .userId(req.getUserId())
-                .type(UsdtTxRecordType.Withdraw)
+                .type(UsdtTxRecordTypeEnum.Withdraw.getType())
                 .fromAddress(web3JClient.getWalletAddress())
                 .toAddress(req.getAddress())
                 .contractAddress(web3JClient.getContractAddress())
                 .quantity(req.getQuantity())
                 .times(0)
                 .serialNo(serialNo)
-                .status(UsdtTxRecordStatus.No)
+                .status(UsdtTxRecordStatusEnum.No.getStatus())
                 .occurDate(DateUtils.getDateAsInt(new Date()))
                 .createTime(new Date())
                 .txHash(txHash)
