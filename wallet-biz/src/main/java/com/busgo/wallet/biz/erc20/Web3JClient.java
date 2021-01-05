@@ -106,12 +106,13 @@ public class Web3JClient implements InitializingBean {
         }
         this.admin = Admin.build(httpService);
         //加载转账所需的凭证，用私钥
-        this.credentials = WalletUtils.loadCredentials(this.usdtWalletPrivateKeyPassword, this.usdtWalletPrivateKeyPath);
-        this.walletAddress = this.credentials.getAddress();
+       // this.credentials = WalletUtils.loadCredentials(this.usdtWalletPrivateKeyPassword, this.usdtWalletPrivateKeyPath);
+       // this.walletAddress = this.credentials.getAddress();
 
         // 订阅 erc20-usdt 交易日志
-        this.subscribe();
+        //this.subscribe();
         // this.transfer("0x9794Db737Aad50A82287781ed7e06CCB03F3064C", new BigDecimal("1.001"));
+
     }
 
 
@@ -265,7 +266,11 @@ public class Web3JClient implements InitializingBean {
      * @return
      */
     public boolean unlockAccount(String address, String password) throws IOException {
+
+
         return this.admin.personalUnlockAccount(address, password).send().accountUnlocked();
+
+
     }
 
 
